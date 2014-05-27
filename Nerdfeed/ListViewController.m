@@ -76,11 +76,12 @@
      
 //     UIImage *myImage2 =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://cdn.ifanr.cn/wp-content/uploads/2014/05/IMG_1048.jpg"]]];
      
+     UIImage *myImage2 =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[item image]]]];
      
-//     NSURL *url=[NSURL URLWithString:[item image]];
-//     UIImage *myImage2 =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[item image]]]];
-//     cell.imageView.image=myImage2;
+//     NSLog(@"NSURL URLWithString:[item image] %@",[item image]);
+     cell.imageView.image=[self setThumbnailFromImage:myImage2];
      
+//     NSLog(@"NSURL URLWithString:[item image] %f,%f",cell.imageView.image.size.width,cell.imageView.image.size.height);
 //     cell.font=[UIFont systemFontOfSize:14.0];
      
      [[cell textLabel] setText:[item title]];
@@ -162,14 +163,31 @@
     
 //    NSURL *url=[NSURL URLWithString:@"http://forums.bignerdranch.com/smartfeed.php?"@"limit=1_DAY&sort_by=standard&feed_type=RSS2.0&feed_style=COMPACT"];
     
-//    NSURL *url=[NSURL URLWithString:@"http://www.ifanr.com/feed"];
-    NSURL *url=[NSURL URLWithString:@"http://news.163.com/special/00011K6L/rss_newstop.xml"];
+    NSURL *url=[NSURL URLWithString:@"http://www.ifanr.com/feed"];
+//    NSURL *url=[NSURL URLWithString:@"http://news.163.com/special/00011K6L/rss_newstop.xml"];
 
     
     NSURLRequest *request=[NSURLRequest requestWithURL:url];
     
     connection=[[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
 }
+
+
+-(UIImage *)setThumbnailFromImage:(UIImage *)image
+{
+    CGRect newRect=CGRectMake(0, 0, 80,60 );
+    float ratio=MAX(newRect.size.width/image.size.width,newRect.size.height/image.size.height);
+    
+    UIGraphicsBeginImageContextWithOptions(newRect.size, NO, 0.0);
+    [image drawInRect:CGRectMake(0,0,ratio * image.size.width,ratio * image.size.height)];
+    
+    UIImage *scaledImage=UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return scaledImage;
+}
+
+
+
 //  #pragma mark - NSURLConnection 委托 － connection didFailWithError:
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {

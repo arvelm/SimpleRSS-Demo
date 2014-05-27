@@ -27,4 +27,7 @@
 //  #pragma mark - 方法（NSURL、NSURLRequest、NSURLConnection）
 -(void)fetchEntries;
 
+//  # 创建缩略图
+-(UIImage *)setThumbnailFromImage:(UIImage *) image;
+
 @end
